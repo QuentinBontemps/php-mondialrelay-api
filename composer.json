@@ -1,13 +1,18 @@
 {
-  "name": "xaviborja/php-mondialrelay-api",
+  "name": "quentinbontemps/php-mondialrelay-api",
   "description": "A PHP library for dealing with Mondial Relay API (http://api.mondialrelay.com)",
   "license": "MIT",
   "authors": [
     {
       "name": "Xavier Borja",
       "email": "xavibm86@gmail.com"
+    },
+    {
+      "name": "Quentin Bontemps",
+      "email": "q.bontemps@gmail.com"
     }
   ],
+  "version": "1.0.0",
   "require-dev": {
     "phpunit/phpunit": "^5.0"
   },
@@ -19,8 +24,5 @@
   },
   "config": {
     "bin-dir": "bin"
-  },
-  "require": {
-    "xaviborja/php-mondialrelay-api": "dev-master"
   }
 }
