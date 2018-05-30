@@ -12,7 +12,7 @@
       "email": "q.bontemps@gmail.com"
     }
   ],
-  "version": "1.0.1",
+  "version": "1.0.2",
   "require-dev": {
     "phpunit/phpunit": "^5.0"
   },
