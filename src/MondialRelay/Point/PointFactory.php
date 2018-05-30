@@ -69,6 +69,6 @@ class PointFactory
             }
         }
 
-        return $address;
+        return $localisation;
     }
 }
