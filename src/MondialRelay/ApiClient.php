@@ -24,18 +24,18 @@ class ApiClient
     {
         try {
             $request = $this->decorateRequest($request);
-            $result = $this->client->WSI3_PointRelais_Recherche($request);
+            $result = $this->client->WSI4_PointRelais_Recherche($request);
             $pointFactory = new PointFactory();
-            $this->checkResponse('WSI3_PointRelais_Recherche', $result);
+            $this->checkResponse('WSI4_PointRelais_Recherche', $result);
             $delivery_points = [];
-            if (!property_exists($result->WSI3_PointRelais_RechercheResult->PointsRelais, 'PointRelais_Details')) {
+            if (!property_exists($result->WSI4_PointRelais_RechercheResult->PointsRelais, 'PointRelais_Details')) {
                 return $delivery_points;
             }
-            if (is_object($result->WSI3_PointRelais_RechercheResult->PointsRelais->PointRelais_Details)) {
-                $delivery_points[] = $pointFactory->create($result->WSI3_PointRelais_RechercheResult->PointsRelais->PointRelais_Details);
+            if (is_object($result->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details)) {
+                $delivery_points[] = $pointFactory->create($result->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details);
                 return $delivery_points;
             }
-            foreach ($result->WSI3_PointRelais_RechercheResult->PointsRelais->PointRelais_Details as $destination_point) {
+            foreach ($result->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details as $destination_point) {
                 $delivery_points[] = $pointFactory->create($destination_point);
             }
             return $delivery_points;

@@ -12,30 +12,63 @@ use MondialRelay\BussinessHours\BussinessHoursFactory;
  */
 class PointFactory
 {
+
     public function create($response)
     {
         $bussines_hours = (new BussinessHoursFactory())->create($response);
+
         return new Point(
             $response->Num,
             str_replace(",", ".", $response->Latitude),
             str_replace(",", ".", $response->Longitude),
             $response->CP,
-            [
-                trim($response->LgAdr1),
-                trim($response->LgAdr2),
-                trim($response->LgAdr3),
-                trim($response->LgAdr4)
-            ],
+            $this->extractAddress($response),
             $response->Ville,
             $response->Pays,
-            [
-                $response->Localisation1,
-                $response->Localisation2
-            ],
+            $this->extractLocalisation($response),
             $response->TypeActivite,
             $response->Information,
             $bussines_hours
         );
+    }
 
+    protected function extractAddress($response)
+    {
+        $address = [];
+        $attributes = [
+            'LgAdr1',
+            'LgAdr2',
+            'LgAdr3',
+            'LgAdr4',
+        ];
+
+        foreach ($attributes as $attribute)
+        {
+            if (property_exists($response, $attribute))
+            {
+                $address[] = trim($response->{$attribute});
+            }
+        }
+
+        return $address;
+    }
+
+    protected function extractLocalisation($response)
+    {
+        $localisation = [];
+        $attributes = [
+            'Localisation1',
+            'Localisation2',
+        ];
+
+        foreach ($attributes as $attribute)
+        {
+            if (property_exists($response, $attribute))
+            {
+                $localisation[] = trim($response->{$attribute});
+            }
+        }
+
+        return $address;
     }
 }
