@@ -26,9 +26,12 @@ class PointFactory
             $response->Ville,
             $response->Pays,
             $this->extractLocalisation($response),
-            $response->TypeActivite,
-            $response->Information,
-            $bussines_hours
+            property_exists($response, 'TypeActivite') ? $response->TypeActivite : null,
+            property_exists($response, 'Information') ? $response->Information : null,
+            $bussines_hours,
+            property_exists($response, 'URL_Photo') ? $response->URL_Photo : null,
+            property_exists($response, 'URL_Plan') ? $response->URL_Plan : null,
+            property_exists($response, 'Distance') ? $response->Distance : null
         );
     }
 

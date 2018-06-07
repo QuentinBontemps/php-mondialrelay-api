@@ -22,24 +22,31 @@ class ApiClient
 
     public function findDeliveryPoints(array $request)
     {
-        try {
+        try
+        {
             $request = $this->decorateRequest($request);
             $result = $this->client->WSI4_PointRelais_Recherche($request);
             $pointFactory = new PointFactory();
             $this->checkResponse('WSI4_PointRelais_Recherche', $result);
             $delivery_points = [];
-            if (!property_exists($result->WSI4_PointRelais_RechercheResult->PointsRelais, 'PointRelais_Details')) {
+            if ( ! property_exists($result->WSI4_PointRelais_RechercheResult->PointsRelais, 'PointRelais_Details'))
+            {
                 return $delivery_points;
             }
-            if (is_object($result->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details)) {
+            if (is_object($result->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details))
+            {
                 $delivery_points[] = $pointFactory->create($result->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details);
+
                 return $delivery_points;
             }
-            foreach ($result->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details as $destination_point) {
+            foreach ($result->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details as $destination_point)
+            {
                 $delivery_points[] = $pointFactory->create($destination_point);
             }
+
             return $delivery_points;
-        } catch (\SoapFault $e) {
+        } catch (\SoapFault $e)
+        {
             throw new \Exception();
         }
 
@@ -47,13 +54,15 @@ class ApiClient
 
     public function findDeliveryPoint($id, $country)
     {
-        try {
+        try
+        {
             return $this->findDeliveryPoints(array(
                 'NumPointRelais' => $id,
-                'Pays' => $country
+                'Pays'           => $country
             ));
 
-        } catch (\SoapFault $e) {
+        } catch (\SoapFault $e)
+        {
             throw new \Exception();
         }
     }
@@ -61,22 +70,25 @@ class ApiClient
     private function decorateRequest($request)
     {
         $key = $this->websiteId;
-        foreach ($request as $parameter => $value) {
+        foreach ($request as $parameter => $value)
+        {
             $key .= $value;
         }
         $key .= $this->websiteKey;
         $request['Enseigne'] = $this->websiteId;
         $request['Security'] = strtoupper(md5($key));
+
         return $request;
     }
 
     private function checkResponse($method, $result)
     {
         $method = $method . "Result";
-        if ($result->{$method}->STAT != 0) {
+        if ($result->{$method}->STAT != 0)
+        {
             $request = $this->decorateRequest([
                 'STAT_ID' => $result->{$method}->STAT,
-                'Langue' => 'ES',
+                'Langue'  => 'ES',
             ]);
             $error_response = $this->client->WSI2_STAT_Label($request);
             throw new \InvalidArgumentException($error_response->WSI2_STAT_LabelResult);
@@ -85,7 +97,8 @@ class ApiClient
 
     public function createExpedition(array $request)
     {
-        try {
+        try
+        {
 
             $request = $this->decorateRequest($request);
             $result = $this->client->WSI2_CreationExpedition($request);
@@ -101,7 +114,8 @@ class ApiClient
                 $result->WSI2_CreationExpeditionResult->TRI_LivraisonMode,
                 $result->WSI2_CreationExpeditionResult->CodesBarres->string);
 
-        } catch (\SoapFault $e) {
+        } catch (\SoapFault $e)
+        {
             throw new \Exception();
         }
     }
@@ -109,7 +123,8 @@ class ApiClient
     public function generateTickets(array $request)
     {
 
-        try {
+        try
+        {
 
             $request = $this->decorateRequest($request);
             $result = $this->client->WSI3_GetEtiquettes($request);
@@ -120,7 +135,8 @@ class ApiClient
                 $result->WSI3_GetEtiquettesResult->URL_PDF_A5,
                 $result->WSI3_GetEtiquettesResult->URL_PDF_10x15);
 
-        } catch (\SoapFault $e) {
+        } catch (\SoapFault $e)
+        {
             throw new \Exception();
         }
     }

@@ -6,6 +6,7 @@ namespace MondialRelay\BussinessHours;
 
 class BussinessHours
 {
+
     private $day;
     private $openingTime1;
     private $closingTime1;
@@ -45,7 +46,4 @@ class BussinessHours
     {
         return $this->closingTime2;
     }
-
-
-
 }

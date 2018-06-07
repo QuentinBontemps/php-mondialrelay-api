@@ -6,6 +6,7 @@ namespace MondialRelay\Point;
 
 class Point
 {
+
     private $id;
     private $latitude;
     private $longitude;
@@ -17,6 +18,9 @@ class Point
     private $activityType;
     private $information;
     private $business_hours;
+    private $url_photo;
+    private $url_plan;
+    private $distance;
 
     public function __construct(
         $id,
@@ -29,8 +33,12 @@ class Point
         array $location,
         $activityType,
         $information,
-        array $business_hours
-    ) {
+        array $business_hours,
+        $url_photo,
+        $url_plan,
+        $distance
+    )
+    {
         $this->id = $id;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
@@ -42,6 +50,9 @@ class Point
         $this->activityType = $activityType;
         $this->information = $information;
         $this->business_hours = $business_hours;
+        $this->url_photo = $url_photo;
+        $this->url_plan = $url_plan;
+        $this->distance = $distance;
     }
 
 
@@ -100,5 +111,18 @@ class Point
         return $this->business_hours;
     }
 
+    public function url_plan()
+    {
+        return $this->url_plan;
+    }
 
+    public function url_photo()
+    {
+        return $this->url_photo;
+    }
+
+    public function distance()
+    {
+        return $this->distance;
+    }
 }
