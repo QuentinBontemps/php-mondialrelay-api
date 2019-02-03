@@ -8,7 +8,6 @@ use MondialRelay\Ticket\TicketFactory;
 
 class ApiClient
 {
-
     private $websiteId;
     private $websiteKey;
     private $client;
@@ -50,7 +49,6 @@ class ApiClient
         {
             throw new \Exception();
         }
-
     }
 
     public function findDeliveryPoint($id, $country)
@@ -71,10 +69,12 @@ class ApiClient
     private function decorateRequest($request)
     {
         $key = $this->websiteId;
+
         foreach ($request as $parameter => $value)
         {
             $key .= $value;
         }
+
         $key .= $this->websiteKey;
         $request['Enseigne'] = $this->websiteId;
         $request['Security'] = strtoupper(md5($key));
@@ -85,6 +85,7 @@ class ApiClient
     private function checkResponse($method, $result)
     {
         $method = $method . "Result";
+
         if ($result->{$method}->STAT != 0)
         {
             $request = $this->decorateRequest([
@@ -100,7 +101,6 @@ class ApiClient
     {
         try
         {
-
             $request = $this->decorateRequest($request);
             $result = $this->client->WSI2_CreationExpedition($request);
             $this->checkResponse('WSI2_CreationExpedition', $result);
@@ -123,10 +123,8 @@ class ApiClient
 
     public function generateTickets(array $request)
     {
-
         try
         {
-
             $request = $this->decorateRequest($request);
             $result = $this->client->WSI3_GetEtiquettes($request);
             $this->checkResponse('WSI3_GetEtiquettes', $result);
@@ -142,4 +140,28 @@ class ApiClient
         }
     }
 
+    public function tracingColisDetaille(array $request)
+    {
+        try
+        {
+            $request = $this->decorateRequest($request);
+            $result = $this->client->WSI2_TracingColisDetaille($request);
+            $this->checkResponse('WSI2_TracingColisDetaille', $result);
+
+            return (new \TracingFactory())->create(
+                $result->WSI2_TracingColisDetaille->STAT,
+                $result->WSI2_TracingColisDetaille->Libelle01,
+                $result->WSI2_TracingColisDetaille->Libelle02,
+                $result->WSI2_TracingColisDetaille->Tracing,
+                $result->WSI2_TracingColisDetaille->Tracing_Libelle,
+                $result->WSI2_TracingColisDetaille->Tracing_Date,
+                $result->WSI2_TracingColisDetaille->Tracing_Heure,
+                $result->WSI2_TracingColisDetaille->Tracing_Lieu,
+                $result->WSI2_TracingColisDetaille->Tracing_Pays);
+        }
+        catch (\SoapFault $e)
+        {
+            throw new \Exception();
+        }
+    }
 }
