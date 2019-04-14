@@ -5,6 +5,7 @@ namespace MondialRelay;
 use MondialRelay\Expedition\ExpeditionFactory;
 use MondialRelay\Point\PointFactory;
 use MondialRelay\Ticket\TicketFactory;
+use MondialRelay\Tracing\TracingFactory;
 
 class ApiClient
 {
@@ -85,8 +86,9 @@ class ApiClient
     private function checkResponse($method, $result)
     {
         $method = $method . "Result";
+        $tracingStats = [80, 81, 82, 83, 84, 85, 86, 87,88, 89];
 
-        if ($result->{$method}->STAT != 0)
+        if (!in_array($result->{$method}->STAT, array_merge([0], $tracingStats)))
         {
             $request = $this->decorateRequest([
                 'STAT_ID' => $result->{$method}->STAT,
@@ -148,16 +150,12 @@ class ApiClient
             $result = $this->client->WSI2_TracingColisDetaille($request);
             $this->checkResponse('WSI2_TracingColisDetaille', $result);
 
-            return (new \TracingFactory())->create(
-                $result->WSI2_TracingColisDetaille->STAT,
-                $result->WSI2_TracingColisDetaille->Libelle01,
-                $result->WSI2_TracingColisDetaille->Libelle02,
-                $result->WSI2_TracingColisDetaille->Tracing,
-                $result->WSI2_TracingColisDetaille->Tracing_Libelle,
-                $result->WSI2_TracingColisDetaille->Tracing_Date,
-                $result->WSI2_TracingColisDetaille->Tracing_Heure,
-                $result->WSI2_TracingColisDetaille->Tracing_Lieu,
-                $result->WSI2_TracingColisDetaille->Tracing_Pays);
+            return (new TracingFactory())->create(
+                $result->WSI2_TracingColisDetailleResult->STAT,
+                $result->WSI2_TracingColisDetailleResult->Libelle01,
+                $result->WSI2_TracingColisDetailleResult->Libelle02,
+                $result->WSI2_TracingColisDetailleResult->Tracing
+            );
         }
         catch (\SoapFault $e)
         {

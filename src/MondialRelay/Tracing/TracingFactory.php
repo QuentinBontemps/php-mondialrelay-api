@@ -6,6 +6,8 @@
  * Time: 16:26
  */
 
+namespace MondialRelay\Tracing;
+
 class TracingFactory
 {
     /**
@@ -13,11 +15,6 @@ class TracingFactory
      * @param $libelle01
      * @param $libelle02
      * @param $tracing
-     * @param $tracingLibelle
-     * @param $tracingDate
-     * @param $tracingHeure
-     * @param $tracingLieu
-     * @param $tracingPays
      *
      * @return Tracing
      */
@@ -25,24 +22,14 @@ class TracingFactory
         $stat,
         $libelle01, 
         $libelle02, 
-        $tracing, 
-        $tracingLibelle, 
-        $tracingDate, 
-        $tracingHeure, 
-        $tracingLieu, 
-        $tracingPays
+        $tracing
     )
     {
         return new Tracing(
             $stat,
             $libelle01,
             $libelle02,
-            $tracing,
-            $tracingLibelle,
-            $tracingDate,
-            $tracingHeure,
-            $tracingLieu,
-            $tracingPays
+            $tracing
         );
     }
 }
